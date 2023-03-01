@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: spring-cloud-openfeign-retry-same-server-bug-demonstrator
+  cloud:
+    discovery:
+      enabled: true
+    consul:
+      enabled: true
+      discovery:
+        instanceId: the-client-application
+    loadbalancer:
+      retry:
+        enabled: true
+        retryable-status-codes: 500,501,502,503,504
+        # this keeps rotating and can, if >= to the number of instances, return to the original service instance OK
+        max-retries-on-next-service-instance: 3
+        # setting this to >0 causes silliness - originally raised as https://github.com/spring-cloud/spring-cloud-openfeign/issues/650
+        #                                     - now re-raised as https://github.com/spring-cloud/spring-cloud-openfeign/issues/840
+        max-retries-on-same-service-instance: 1
